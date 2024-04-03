@@ -1,10 +1,11 @@
 {
   "scripts": {
-    "e2e:test": "playwright test"
+    "e2e:test": "bddgen && playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
     "@types/node": "^20.12.3",
-    "playwright": "^1.42.1"
+    "playwright": "^1.42.1",
+    "playwright-bdd": "^6.0.3"
   }
 }
