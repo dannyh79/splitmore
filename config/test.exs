@@ -13,12 +13,11 @@ config :splitmore, Splitmore.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
 config :splitmore, SplitmoreWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "kIKFO1BibwSi15WhT6FsU/UV+C+J3n1GDqHsk1UGa7wSgoACbf/dGKDNTWHaDbu7",
-  server: false
+  # enables server for e2e tests
+  server: true
 
 # In test we don't send emails.
 config :splitmore, Splitmore.Mailer, adapter: Swoosh.Adapters.Test
