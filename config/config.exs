@@ -9,7 +9,7 @@ import Config
 
 config :splitmore,
   ecto_repos: [Splitmore.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configures the endpoint
 config :splitmore, SplitmoreWeb.Endpoint,
