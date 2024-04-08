@@ -3,6 +3,7 @@
 ## Backlog
 
 - [ ] Integrate playwright tests into `mix test`
+- [ ] Parallelize playwright tests (`workers` in playwright.config.ts)
 
 To start your Phoenix server:
 
