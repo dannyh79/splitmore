@@ -3,6 +3,7 @@
 ## Backlog
 
 - [ ] Integrate playwright tests into `mix test`
+- [ ] Support browsers other than chromium in e2e tests (`projects` in playwright.config.ts)
 - [ ] Parallelize playwright tests (`workers` in playwright.config.ts)
 
 To start your Phoenix server:
