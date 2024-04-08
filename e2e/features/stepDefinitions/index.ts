@@ -36,6 +36,15 @@ When('I add the expenses via {string}:', async ({ page }, path: string, data: Da
   }
 });
 
+When('I update the expense:', async ({ page }, data: DataTable) => {
+  await page.getByText('Edit').click();
+
+  const [row] = data.hashes();
+  await page.getByLabel('Name').fill(row.name);
+  await page.getByLabel('Amount').fill(row.amount);
+  await page.getByText('Save Expense').click();
+});
+
 Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
