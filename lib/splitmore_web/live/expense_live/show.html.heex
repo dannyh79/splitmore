@@ -1,0 +1,27 @@
+<.header>
+  Expense <%= @expense.id %>
+  <:subtitle>This is a expense record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/expenses/#{@expense}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit expense</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @expense.name %></:item>
+  <:item title="Amount"><%= @expense.amount %></:item>
+</.list>
+
+<.back navigate={~p"/expenses"}>Back to expenses</.back>
+
+<.modal :if={@live_action == :edit} id="expense-modal" show on_cancel={JS.patch(~p"/expenses/#{@expense}")}>
+  <.live_component
+    module={SplitmoreWeb.ExpenseLive.FormComponent}
+    id={@expense.id}
+    title={@page_title}
+    action={@live_action}
+    expense={@expense}
+    patch={~p"/expenses/#{@expense}"}
+  />
+</.modal>
