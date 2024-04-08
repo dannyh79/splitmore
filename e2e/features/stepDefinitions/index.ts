@@ -45,6 +45,14 @@ When('I update the expense:', async ({ page }, data: DataTable) => {
   await page.getByText('Save Expense').click();
 });
 
+When('I delete the expense {string}', async ({ page }, name: string) => {
+  const deleteButton = page
+    .locator(`#expenses > tr[id*="expenses-"]`)
+    .filter({ hasText: name })
+    .getByText('Delete');
+  await deleteButton.click();
+});
+
 Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
