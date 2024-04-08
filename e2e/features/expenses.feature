@@ -7,3 +7,9 @@ Feature: Expenses Page
     When I visit "/expenses"
     Then I can see the title "Listing Expenses"
     And I can see the expenses
+  Scenario: I can add expenses
+    When I visit "/expenses"
+    And I add the expenses via "/expenses/new":
+    | name | amount |
+    | 早餐 | 1234   |
+    Then I can see the expenses

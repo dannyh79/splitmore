@@ -27,6 +27,15 @@ When('I visit {string}', async ({ page }, path: string) => {
   await page.goto(path);
 });
 
+When('I add the expenses via {string}:', async ({ page }, path: string, data: DataTable) => {
+  for (const row of data.hashes()) {
+    await page.goto(path);
+    await page.getByLabel('Name').fill(row.name);
+    await page.getByLabel('Amount').fill(row.amount);
+    await page.getByText('Save Expense').click();
+  }
+});
+
 Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
