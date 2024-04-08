@@ -16,6 +16,7 @@ config :splitmore, Splitmore.Repo,
 config :splitmore, SplitmoreWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "kIKFO1BibwSi15WhT6FsU/UV+C+J3n1GDqHsk1UGa7wSgoACbf/dGKDNTWHaDbu7",
+  check_origin: false,
   # enables server for e2e tests
   server: true
 
