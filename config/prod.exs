@@ -16,5 +16,9 @@ config :swoosh, local: false
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.fetch_env!(GHOUTHCLIENTID),
+  client_secret: System.fetch_env!(GHOUTHCLIENTSECRET)
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

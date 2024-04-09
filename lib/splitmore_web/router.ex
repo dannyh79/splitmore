@@ -8,6 +8,7 @@ defmodule SplitmoreWeb.Router do
     plug :put_root_layout, html: {SplitmoreWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug SplitmoreWeb.Plugs.SetCurrentUser
   end
 
   pipeline :api do
@@ -25,6 +26,14 @@ defmodule SplitmoreWeb.Router do
 
     live "/expenses/:id", ExpenseLive.Show, :show
     live "/expenses/:id/show/edit", ExpenseLive.Show, :edit
+  end
+
+  scope "/auth", SplitmoreWeb do
+    pipe_through :browser
+
+    delete "/logout", AuthController, :logout
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.

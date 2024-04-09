@@ -79,5 +79,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Include HEEx debug annotations as HTML comments in rendered markup
 config :phoenix_live_view, :debug_heex_annotations, true
 
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: "your-github-app-id",
+  client_secret: "your-github-app-secret",
+  ignores_csrf_attack: true
+
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
