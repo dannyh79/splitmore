@@ -3,8 +3,7 @@ defmodule SplitmoreWeb.AuthController do
 
   plug Ueberauth
 
-  alias Splitmore.Accounts.User
-  alias Splitmore.Repo
+  alias Splitmore.Accounts
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     user_data = %{token: auth.credentials.token, email: auth.info.email, provider: "github"}
@@ -30,12 +29,10 @@ defmodule SplitmoreWeb.AuthController do
   end
 
   defp find_or_create_user(user_data) do
-    changeset = User.changeset(%User{}, user_data)
-
-    case Repo.get_by(User, email: changeset.changes.email) do
+    case Accounts.get_user_by_email(user_data.email) do
       nil ->
-        IO.puts("User #{changeset.changes.email} not found, creating new one")
-        Repo.insert(changeset)
+        IO.puts("User #{user_data.email} not found, creating new one")
+        Accounts.create_user(user_data)
 
       user ->
         {:ok, user}
