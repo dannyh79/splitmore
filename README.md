@@ -6,6 +6,12 @@
 - [ ] Support browsers other than chromium in e2e tests (`projects` in playwright.config.ts)
 - [ ] Parallelize playwright tests (`workers` in playwright.config.ts)
 
+## Development
+
+- `cp config/dev.exs.example config/dev.exs` and update env for `ueberauth`
+
+---
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
