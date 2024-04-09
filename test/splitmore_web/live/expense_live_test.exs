@@ -8,13 +8,13 @@ defmodule SplitmoreWeb.ExpenseLiveTest do
   @update_attrs %{name: "some updated name", amount: 43}
   @invalid_attrs %{name: nil, amount: nil}
 
-  defp create_expense(_) do
-    expense = expense_fixture()
+  defp create_expense(%{user: user}) do
+    expense = expense_fixture(%{user_id: user.id})
     %{expense: expense}
   end
 
   describe "Index" do
-    setup [:create_expense]
+    setup [:register_and_log_in_user, :create_expense]
 
     test "lists all expenses", %{conn: conn, expense: expense} do
       {:ok, _index_live, html} = live(conn, ~p"/expenses")
@@ -78,7 +78,7 @@ defmodule SplitmoreWeb.ExpenseLiveTest do
   end
 
   describe "Show" do
-    setup [:create_expense]
+    setup [:register_and_log_in_user, :create_expense]
 
     test "displays expense", %{conn: conn, expense: expense} do
       {:ok, _show_live, html} = live(conn, ~p"/expenses/#{expense}")

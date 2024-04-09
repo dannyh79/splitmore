@@ -20,12 +20,14 @@ defmodule SplitmoreWeb.Router do
 
     get "/", PageController, :home
 
-    live "/expenses", ExpenseLive.Index, :index
-    live "/expenses/new", ExpenseLive.Index, :new
-    live "/expenses/:id/edit", ExpenseLive.Index, :edit
+    live_session :default, on_mount: SplitmoreWeb.UserAuth do
+      live "/expenses", ExpenseLive.Index, :index
+      live "/expenses/new", ExpenseLive.Index, :new
+      live "/expenses/:id/edit", ExpenseLive.Index, :edit
 
-    live "/expenses/:id", ExpenseLive.Show, :show
-    live "/expenses/:id/show/edit", ExpenseLive.Show, :edit
+      live "/expenses/:id", ExpenseLive.Show, :show
+      live "/expenses/:id/show/edit", ExpenseLive.Show, :edit
+    end
   end
 
   scope "/auth", SplitmoreWeb do

@@ -7,6 +7,7 @@ defmodule Splitmore.ExpensesTest do
     alias Splitmore.Expenses.Expense
 
     import Splitmore.ExpensesFixtures
+    import Splitmore.UsersFixtures
 
     @invalid_attrs %{name: nil, amount: nil}
 
@@ -21,11 +22,13 @@ defmodule Splitmore.ExpensesTest do
     end
 
     test "create_expense/1 with valid data creates a expense" do
-      valid_attrs = %{name: "some name", amount: 42}
+      user = user_fixture()
+      valid_attrs = %{name: "some name", amount: 42, user_id: user.id}
 
       assert {:ok, %Expense{} = expense} = Expenses.create_expense(valid_attrs)
       assert expense.name == "some name"
       assert expense.amount == 42
+      assert expense.user_id == user.id
     end
 
     test "create_expense/1 with invalid data returns error changeset" do

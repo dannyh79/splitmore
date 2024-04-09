@@ -1,6 +1,7 @@
 defmodule Splitmore.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Splitmore.Expenses.Expense
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -8,6 +9,8 @@ defmodule Splitmore.Accounts.User do
     field :email, :string
     field :provider, :string
     field :token, :string
+
+    has_many :expenses, Expense
 
     timestamps(type: :utc_datetime)
   end

@@ -4,6 +4,7 @@ defmodule Splitmore.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Splitmore.Accounts.User
   alias Splitmore.Repo
 
   ## Database getters
@@ -39,4 +40,7 @@ defmodule Splitmore.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def get_user(nil), do: nil
+  def get_user(id), do: Repo.get(User, id)
 end
