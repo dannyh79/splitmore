@@ -32,10 +32,10 @@ defmodule Splitmore.Accounts do
 
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_user!("930ec9de-fac5-4d21-88da-ee41ea5f1615")
       %User{}
 
-      iex> get_user!(456)
+      iex> get_user!(123)
       ** (Ecto.NoResultsError)
 
   """
