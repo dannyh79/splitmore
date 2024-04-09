@@ -57,6 +57,10 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
 
+Then('I can see the login button', async ({ page }) => {
+  await expect(page.getByText(/Log in.*/i)).toBeVisible();
+});
+
 Then('I can see the expenses', async ({ page }) => {
   const [rows] = await DB.query(`SELECT name FROM expenses`);
   await expect(page.locator('#expenses > tr[id*="expenses-"]')).toContainText(
