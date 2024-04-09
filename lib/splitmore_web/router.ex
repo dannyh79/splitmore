@@ -59,4 +59,12 @@ defmodule SplitmoreWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  if Application.compile_env(:splitmore, :test_routes) do
+    scope "/test/api", SplitmoreWeb do
+      pipe_through :browser
+
+      get "/login", TestAuthController, :login
+    end
+  end
 end
