@@ -7,24 +7,43 @@ const { After, Given, Then, When } = createBdd();
 
 After(async () => {
   await DB.query('DELETE FROM expenses');
+  await DB.query('DELETE FROM users');
 });
 
-Given('there are expenses:', async ({}, data: DataTable) => {
-  let q = `INSERT INTO expenses (id, name, amount, inserted_at, updated_at)
+Given('there are users:', async ({}, data: DataTable) => {
+  let q = `INSERT INTO users (id, email, provider, token, inserted_at, updated_at)
 VALUES `;
   const rows = data
     .hashes()
     .map(
       (d) =>
-        `('${d.id}', '${d.name}', ${d.amount}, '${d.inserted_at}', '${d.updated_at}')`,
+        `('${d.id}', '${d.email}', '${d.provider}', '${d.token}', '${d.inserted_at}', '${d.updated_at}')`,
     )
-    .join(",");
+    .join(',');
+  q += rows;
+  await DB.query(q);
+});
+
+Given('there are expenses:', async ({}, data: DataTable) => {
+  let q = `INSERT INTO expenses (id, name, amount, user_id, inserted_at, updated_at)
+VALUES `;
+  const rows = data
+    .hashes()
+    .map(
+      (d) =>
+        `('${d.id}', '${d.name}', ${d.amount}, '${d.user_id}', '${d.inserted_at}', '${d.updated_at}')`,
+    )
+    .join(',');
   q += rows;
   await DB.query(q);
 });
 
 When('I visit {string}', async ({ page }, path: string) => {
   await page.goto(path);
+});
+
+When('I have logged in as {string}', async ({ page }, email: string) => {
+  await page.goto(`/test/api/login?email=${email}`);
 });
 
 When('I add the expenses via {string}:', async ({ page }, path: string, data: DataTable) => {
@@ -59,6 +78,10 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
 
 Then('I can see the login button', async ({ page }) => {
   await expect(page.getByText(/Log in.*/i)).toBeVisible();
+});
+
+Then('I am redirected to {string}', async ({ page }, path: string) => {
+  await expect(page).toHaveURL(path)
 });
 
 Then('I can see the expenses', async ({ page }) => {
