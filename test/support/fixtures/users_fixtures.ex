@@ -12,7 +12,7 @@ defmodule Splitmore.UsersFixtures do
   def user_fixture(attrs \\ %{}) do
     params =
       Enum.into(attrs, %{
-        email: "hello@example.com",
+        email: Faker.Internet.email(),
         provider: "github",
         token: Ecto.UUID.generate()
       })
