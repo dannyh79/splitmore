@@ -11,13 +11,13 @@
   <.table
     id="expenses"
     rows={@streams.expenses}
-    row_click={fn {_id, expense} -> JS.navigate(~p"/expenses/#{expense}") end}
+    row_click={fn {_id, expense} -> JS.navigate(~p"/groups/#{@group_id}/expenses/#{expense}") end}
   >
     <:col :let={{_id, expense}} label="Name"><%= expense.name %></:col>
     <:col :let={{_id, expense}} label="Amount"><%= expense.amount %></:col>
     <:action :let={{_id, expense}}>
       <div class="sr-only">
-        <.link navigate={~p"/expenses/#{expense}"}>Show</.link>
+        <.link navigate={~p"/groups/#{@group_id}/expenses/#{expense}"}>Show</.link>
       </div>
       <.link patch={~p"/groups/#{@group_id}/expenses/#{expense}/edit"}>Edit</.link>
     </:action>

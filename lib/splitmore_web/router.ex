@@ -35,6 +35,7 @@ defmodule SplitmoreWeb.Router do
       live "/groups/:id", GroupLive.Show, :show
       live "/groups/:id/show/edit", GroupLive.Show, :edit
       live "/groups/:id/expenses/new", ExpenseLive.Index, :new
+      live "/groups/:id/expenses/:expense_id", ExpenseLive.Show, :show
       live "/groups/:id/expenses/:expense_id/edit", ExpenseLive.Show, :edit
     end
   end
