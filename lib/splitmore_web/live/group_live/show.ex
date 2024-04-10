@@ -1,6 +1,7 @@
 defmodule SplitmoreWeb.GroupLive.Show do
   use SplitmoreWeb, :live_view
 
+  alias Splitmore.Expenses
   alias Splitmore.Groups
 
   @impl true
@@ -16,6 +17,14 @@ defmodule SplitmoreWeb.GroupLive.Show do
      socket
      |> assign(:group, group)
      |> assign(:page_title, page_title(socket.assigns, group))}
+  end
+
+  @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    expense = Expenses.get_expense!(id)
+    {:ok, _} = Expenses.delete_expense(expense)
+
+    {:noreply, socket}
   end
 
   defp page_title(%{live_action: :show}, %{name: name}), do: "Show #{name} Expenses"
