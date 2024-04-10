@@ -2,26 +2,29 @@ defmodule Splitmore.ExpensesTest do
   use Splitmore.DataCase
 
   alias Splitmore.Expenses
+  alias Splitmore.Expenses.Expense
 
-  describe "expenses" do
-    alias Splitmore.Expenses.Expense
+  import Splitmore.ExpensesFixtures
+  import Splitmore.UsersFixtures
 
-    import Splitmore.ExpensesFixtures
-    import Splitmore.UsersFixtures
+  @invalid_attrs %{name: nil, amount: nil}
 
-    @invalid_attrs %{name: nil, amount: nil}
-
-    test "list_expenses/0 returns all expenses" do
+  describe "list_expenses/0" do
+    test "returns all expenses" do
       expense = expense_fixture()
       assert Expenses.list_expenses() == [expense]
     end
+  end
 
-    test "get_expense!/1 returns the expense with given id" do
+  describe "get_expense!/1" do
+    test "returns the expense with given id" do
       expense = expense_fixture()
       assert Expenses.get_expense!(expense.id) == expense
     end
+  end
 
-    test "create_expense/1 with valid data creates a expense" do
+  describe "create_expense/1" do
+    test "creates an expense" do
       user = user_fixture()
       valid_attrs = %{name: "some name", amount: 42, user_id: user.id}
 
@@ -31,11 +34,13 @@ defmodule Splitmore.ExpensesTest do
       assert expense.user_id == user.id
     end
 
-    test "create_expense/1 with invalid data returns error changeset" do
+    test "returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Expenses.create_expense(@invalid_attrs)
     end
+  end
 
-    test "update_expense/2 with valid data updates the expense" do
+  describe "update_expense/2" do
+    test "updates an expense" do
       expense = expense_fixture()
       update_attrs = %{name: "some updated name", amount: 43}
 
@@ -44,19 +49,23 @@ defmodule Splitmore.ExpensesTest do
       assert expense.amount == 43
     end
 
-    test "update_expense/2 with invalid data returns error changeset" do
+    test "returns error changeset" do
       expense = expense_fixture()
       assert {:error, %Ecto.Changeset{}} = Expenses.update_expense(expense, @invalid_attrs)
       assert expense == Expenses.get_expense!(expense.id)
     end
+  end
 
-    test "delete_expense/1 deletes the expense" do
+  describe "delete_expense/1" do
+    test "deletes the expense" do
       expense = expense_fixture()
       assert {:ok, %Expense{}} = Expenses.delete_expense(expense)
       assert_raise Ecto.NoResultsError, fn -> Expenses.get_expense!(expense.id) end
     end
+  end
 
-    test "change_expense/1 returns a expense changeset" do
+  describe "change_expense/1" do
+    test "returns a expense changeset" do
       expense = expense_fixture()
       assert %Ecto.Changeset{} = Expenses.change_expense(expense)
     end
