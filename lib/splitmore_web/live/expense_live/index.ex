@@ -19,7 +19,7 @@ defmodule SplitmoreWeb.ExpenseLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
+  defp apply_action(socket, :edit, %{"expense_id" => id}) do
     socket
     |> assign(:page_title, "Edit Expense")
     |> assign(:expense, Expenses.get_expense!(id))
@@ -39,7 +39,7 @@ defmodule SplitmoreWeb.ExpenseLive.Index do
 
   @impl true
   def handle_info({SplitmoreWeb.ExpenseLive.FormComponent, {:saved, expense}}, socket) do
-    {:noreply, stream_insert(socket, :expenses, expense)}
+    {:noreply, push_navigate(socket, to: ~p"/groups/#{expense.group_id}")}
   end
 
   @impl true

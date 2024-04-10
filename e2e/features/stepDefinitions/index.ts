@@ -71,7 +71,7 @@ When('I add the group expenses via {string}:', async ({ page }, path: string, da
 });
 
 When('I update the expense:', async ({ page }, data: DataTable) => {
-  await page.getByText('Edit').click();
+  await page.getByText('Edit', { exact: true }).click();
 
   const [row] = data.hashes();
   await page.getByLabel('Name').fill(row.name);
