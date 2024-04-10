@@ -83,8 +83,7 @@ defmodule SplitmoreWeb.GroupLiveTest do
     test "displays group", %{conn: conn, group: group} do
       {:ok, _show_live, html} = live(conn, ~p"/groups/#{group}")
 
-      assert html =~ "Show Group"
-      assert html =~ group.name
+      assert html =~ "Show #{group.name} Expenses"
     end
 
     test "updates group within modal", %{conn: conn, group: group} do

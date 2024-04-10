@@ -10,12 +10,14 @@ defmodule SplitmoreWeb.GroupLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    group = Groups.get_group!(id)
+
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:group, Groups.get_group!(id))}
+     |> assign(:group, group)
+     |> assign(:page_title, page_title(socket.assigns, group))}
   end
 
-  defp page_title(:show), do: "Show Group"
-  defp page_title(:edit), do: "Edit Group"
+  defp page_title(%{live_action: :show}, %{name: name}), do: "Show #{name} Expenses"
+  defp page_title(%{live_action: :edit}, _), do: "Edit Group"
 end
