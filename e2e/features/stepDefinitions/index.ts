@@ -61,7 +61,7 @@ When('I have logged in as {string}', async ({ page }, email: string) => {
   await page.goto(`/test/api/login?email=${email}`);
 });
 
-When('I add the expenses via {string}:', async ({ page }, path: string, data: DataTable) => {
+When('I add the group expenses via {string}:', async ({ page }, path: string, data: DataTable) => {
   for (const row of data.hashes()) {
     await page.goto(path);
     await page.getByLabel('Name').fill(row.name);

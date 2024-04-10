@@ -19,3 +19,16 @@ Feature: Group expenses Page
     When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
     Then I can see the title "Show 宮妙少年 Expenses"
     And I can see the expenses of group "宮妙少年"
+  Scenario: I can add group expenses
+    Given there are users:
+    | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
+    | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | chenghsuan.han@gmail.com | github   | ghu_aaaaaaWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are groups:
+    | id                                   | name     | inserted_at         | updated_at          |
+    | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And I have logged in as "chenghsuan.han@gmail.com"
+    When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
+    And I add the group expenses via "/groups/930ec9de-fac5-4d21-88da-ee41ea5f1615/expenses/new":
+    | name | amount |
+    | 早餐 | 1234   |
+    Then I can see the expenses of group "宮妙少年"

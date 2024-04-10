@@ -6,11 +6,11 @@ defmodule SplitmoreWeb.GroupLive.ExpensesComponent do
   # TODO: avoid unnecessary queries across updates
   @impl true
   def update(%{group_id: id} = _params, socket) do
-    {:ok,
-     stream(
-       socket,
-       :expenses,
-       Expenses.list_group_expenses(id)
-     )}
+    socket =
+      socket
+      |> assign_new(:group_id, fn -> id end)
+      |> stream(:expenses, Expenses.list_group_expenses(id))
+
+    {:ok, socket}
   end
 end

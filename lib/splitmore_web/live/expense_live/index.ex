@@ -5,8 +5,13 @@ defmodule SplitmoreWeb.ExpenseLive.Index do
   alias Splitmore.Expenses.Expense
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, stream(socket, :expenses, Expenses.list_expenses())}
+  def mount(%{"id" => group_id} = _params, _session, socket) do
+    socket =
+      socket
+      |> assign_new(:group_id, fn -> group_id end)
+      |> stream(:expenses, Expenses.list_group_expenses(group_id))
+
+    {:ok, socket}
   end
 
   @impl true

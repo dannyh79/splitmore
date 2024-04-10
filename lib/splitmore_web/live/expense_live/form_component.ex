@@ -22,6 +22,7 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:amount]} type="number" label="Amount" />
         <.input field={@form[:user_id]} type="hidden" value={@current_user.id} />
+        <.input field={@form[:group_id]} type="hidden" value={@group_id} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Expense</.button>
         </:actions>
