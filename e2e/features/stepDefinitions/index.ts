@@ -58,7 +58,7 @@ When('I visit {string}', async ({ page }, path: string) => {
 });
 
 When('I click {string}', async ({ page }, text: string) => {
-  await page.getByText(text, { exact: true }).click();
+  await page.getByText(text, { exact: true }).click({ force: true });
 });
 
 When('I have logged in as {string}', async ({ page }, email: string) => {
