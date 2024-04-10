@@ -4,8 +4,8 @@ defmodule SplitmoreWeb.GroupLive.Show do
   alias Splitmore.Groups
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(%{"id" => id} = _params, _session, socket) do
+    {:ok, assign(socket, :group_id, id)}
   end
 
   @impl true

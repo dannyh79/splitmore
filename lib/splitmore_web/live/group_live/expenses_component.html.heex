@@ -1,0 +1,33 @@
+<div>
+  <.header>
+    Listing Expenses
+    <:actions>
+      <.link patch={~p"/expenses/new"}>
+        <.button>New Expense</.button>
+      </.link>
+    </:actions>
+  </.header>
+
+  <.table
+    id="expenses"
+    rows={@streams.expenses}
+    row_click={fn {_id, expense} -> JS.navigate(~p"/expenses/#{expense}") end}
+  >
+    <:col :let={{_id, expense}} label="Name"><%= expense.name %></:col>
+    <:col :let={{_id, expense}} label="Amount"><%= expense.amount %></:col>
+    <:action :let={{_id, expense}}>
+      <div class="sr-only">
+        <.link navigate={~p"/expenses/#{expense}"}>Show</.link>
+      </div>
+      <.link patch={~p"/expenses/#{expense}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={{id, expense}}>
+      <.link
+        phx-click={JS.push("delete", value: %{id: expense.id}) |> hide("##{id}")}
+        data-confirm="Are you sure?"
+      >
+        Delete
+      </.link>
+    </:action>
+  </.table>
+</div>

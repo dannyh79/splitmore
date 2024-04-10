@@ -26,13 +26,13 @@ VALUES `;
 });
 
 Given('there are expenses:', async ({}, data: DataTable) => {
-  let q = `INSERT INTO expenses (id, name, amount, user_id, inserted_at, updated_at)
+  let q = `INSERT INTO expenses (id, name, amount, group_id, user_id, inserted_at, updated_at)
 VALUES `;
   const rows = data
     .hashes()
     .map(
       (d) =>
-        `('${d.id}', '${d.name}', ${d.amount}, '${d.user_id}', '${d.inserted_at}', '${d.updated_at}')`,
+        `('${d.id}', '${d.name}', ${d.amount}, '${d.group_id}', '${d.user_id}', '${d.inserted_at}', '${d.updated_at}')`,
     )
     .join(',');
   q += rows;
@@ -123,12 +123,19 @@ Then('I am redirected to {string}', async ({ page }, path: string) => {
   await expect(page).toHaveURL(path)
 });
 
-Then('I can see the expenses', async ({ page }) => {
-  const [rows] = await DB.query(`SELECT name FROM expenses`);
-  await expect(page.locator('#expenses > tr[id*="expenses-"]')).toContainText(
-    rows.map((r) => (r as { name: string }).name),
-  );
-});
+Then(
+  'I can see the expenses of group {string}',
+  async ({ page }, name: string) => {
+    const [rows] = await DB.query(`
+      SELECT expenses.name FROM expenses
+      JOIN groups ON expenses.group_id = groups.id
+      WHERE groups.name = '${name}'
+    `);
+    await expect(page.locator('#expenses > tr[id*="expenses-"]')).toContainText(
+      rows.map((r) => (r as { name: string }).name),
+    );
+  },
+);
 
 Then('I can see the groups', async ({ page }) => {
   const [rows] = await DB.query(`SELECT name FROM groups`);

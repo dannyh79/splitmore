@@ -12,6 +12,14 @@
   <:item title="Name"><%= @group.name %></:item>
 </.list>
 
+<section class="mt-14">
+  <.live_component
+    module={SplitmoreWeb.GroupLive.ExpensesComponent}
+    id={"#{@group.id}-expenses"}
+    group_id={@group.id}
+  />
+</section>
+
 <.back navigate={~p"/groups"}>Back to groups</.back>
 
 <.modal :if={@live_action == :edit} id="group-modal" show on_cancel={JS.patch(~p"/groups/#{@group}")}>
