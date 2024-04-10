@@ -7,6 +7,7 @@ const { After, Given, Then, When } = createBdd();
 
 After(async () => {
   await DB.query('DELETE FROM expenses');
+  await DB.query('DELETE FROM groups');
   await DB.query('DELETE FROM users');
 });
 
@@ -32,6 +33,20 @@ VALUES `;
     .map(
       (d) =>
         `('${d.id}', '${d.name}', ${d.amount}, '${d.user_id}', '${d.inserted_at}', '${d.updated_at}')`,
+    )
+    .join(',');
+  q += rows;
+  await DB.query(q);
+});
+
+Given('there are groups:', async ({}, data: DataTable) => {
+  let q = `INSERT INTO groups (id, name, inserted_at, updated_at)
+VALUES `;
+  const rows = data
+    .hashes()
+    .map(
+      (d) =>
+        `('${d.id}', '${d.name}', '${d.inserted_at}', '${d.updated_at}')`,
     )
     .join(',');
   q += rows;
@@ -72,6 +87,30 @@ When('I delete the expense {string}', async ({ page }, name: string) => {
   await deleteButton.click();
 });
 
+When('I add the groups via {string}:', async ({ page }, path: string, data: DataTable) => {
+  for (const row of data.hashes()) {
+    await page.goto(path);
+    await page.getByLabel('Name').fill(row.name);
+    await page.getByText('Save Group').click();
+  }
+});
+
+When('I update the group:', async ({ page }, data: DataTable) => {
+  await page.getByText('Edit').click();
+
+  const [row] = data.hashes();
+  await page.getByLabel('Name').fill(row.name);
+  await page.getByText('Save Group').click();
+});
+
+When('I delete the group {string}', async ({ page }, name: string) => {
+  const deleteButton = page
+    .locator(`#groups > tr[id*="groups-"]`)
+    .filter({ hasText: name })
+    .getByText('Delete');
+  await deleteButton.click();
+});
+
 Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
@@ -87,6 +126,13 @@ Then('I am redirected to {string}', async ({ page }, path: string) => {
 Then('I can see the expenses', async ({ page }) => {
   const [rows] = await DB.query(`SELECT name FROM expenses`);
   await expect(page.locator('#expenses > tr[id*="expenses-"]')).toContainText(
+    rows.map((r) => (r as { name: string }).name),
+  );
+});
+
+Then('I can see the groups', async ({ page }) => {
+  const [rows] = await DB.query(`SELECT name FROM groups`);
+  await expect(page.locator('#groups > tr[id*="groups-"]')).toContainText(
     rows.map((r) => (r as { name: string }).name),
   );
 });
