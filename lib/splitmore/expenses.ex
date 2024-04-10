@@ -22,6 +22,20 @@ defmodule Splitmore.Expenses do
   end
 
   @doc """
+  Returns the list of expenses of a group.
+
+  ## Examples
+
+      iex> list_group_expenses("2fd1e6d3-1dea-46ea-8e52-64d367198969")
+      [%Expense{}, ...]
+
+  """
+  def list_group_expenses(group_id) do
+    query = from e in Expense, where: e.group_id == ^group_id
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single expense.
 
   Raises `Ecto.NoResultsError` if the Expense does not exist.

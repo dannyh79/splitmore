@@ -5,6 +5,7 @@ defmodule Splitmore.ExpensesTest do
   alias Splitmore.Expenses.Expense
 
   import Splitmore.ExpensesFixtures
+  import Splitmore.GroupsFixtures
   import Splitmore.UsersFixtures
 
   @invalid_attrs %{name: nil, amount: nil}
@@ -13,6 +14,16 @@ defmodule Splitmore.ExpensesTest do
     test "returns all expenses" do
       expense = expense_fixture()
       assert Expenses.list_expenses() == [expense]
+    end
+  end
+
+  describe "list_group_expenses/1" do
+    test "returns all expenses of a group" do
+      group1 = group_fixture()
+      group2 = group_fixture()
+      expense = expense_fixture(%{group_id: group1.id})
+      _expense2 = expense_fixture(%{group_id: group2.id})
+      assert Expenses.list_group_expenses(group1.id) == [expense]
     end
   end
 
