@@ -57,6 +57,10 @@ When('I visit {string}', async ({ page }, path: string) => {
   await page.goto(path);
 });
 
+When('I click {string}', async ({ page }, text: string) => {
+  await page.getByText(text, { exact: true }).click();
+});
+
 When('I have logged in as {string}', async ({ page }, email: string) => {
   await page.goto(`/test/api/login?email=${email}`);
 });
@@ -117,6 +121,14 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
 
 Then('I can see the login button', async ({ page }) => {
   await expect(page.getByText(/Log in.*/i)).toBeVisible();
+});
+
+Then('I can see the expense:', async ({ page }, data: DataTable) => {
+  const assertions = data
+    .rows()
+    .flat()
+    .map((text) => expect(page.getByText(text)).toBeVisible());
+  Promise.all(assertions);
 });
 
 Then('I am redirected to {string}', async ({ page }, path: string) => {
