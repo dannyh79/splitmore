@@ -54,6 +54,7 @@ Feature: Group expenses Page
     Given there are users:
     | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
     | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | chenghsuan.han@gmail.com | github   | ghu_aaaaaaWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | another@example.com      | github   | ghu_bbbbbbWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
@@ -63,8 +64,8 @@ Feature: Group expenses Page
     And I have logged in as "chenghsuan.han@gmail.com"
     When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
     And I update the expense:
-    | name | amount |
-    | 午餐 | 5432   |
+    | name | amount | paid_by             |
+    | 午餐 | 5432   | another@example.com |
     Then I am redirected to "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
     And I can see the expenses of group "宮妙少年"
   Scenario: I can delete group expenses

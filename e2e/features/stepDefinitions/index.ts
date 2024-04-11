@@ -81,6 +81,7 @@ When('I update the expense:', async ({ page }, data: DataTable) => {
   const [row] = data.hashes();
   await page.getByLabel('Name').fill(row.name);
   await page.getByLabel('Amount').fill(row.amount);
+  await page.getByLabel('Paid by').selectOption({ label: row.paid_by });
   await page.getByText('Save Expense').click();
 });
 
