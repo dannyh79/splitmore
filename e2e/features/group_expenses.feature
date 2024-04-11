@@ -23,6 +23,7 @@ Feature: Group expenses Page
     Given there are users:
     | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
     | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | chenghsuan.han@gmail.com | github   | ghu_aaaaaaWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | another@example.com      | github   | ghu_bbbbbbWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
@@ -31,6 +32,7 @@ Feature: Group expenses Page
     And I add the group expenses via "/groups/930ec9de-fac5-4d21-88da-ee41ea5f1615/expenses/new":
     | name | amount | paid_by                  |
     | 早餐 | 1234   | chenghsuan.han@gmail.com |
+    | 午餐 | 5432   | another@example.com      |
     Then I can see the expenses of group "宮妙少年"
   Scenario: I can view a group expense
     Given there are users:
