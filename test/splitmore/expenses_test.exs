@@ -29,7 +29,7 @@ defmodule Splitmore.ExpensesTest do
 
   describe "get_expense!/1" do
     test "returns the expense with given id" do
-      expense = expense_fixture()
+      expense = with_paid_by_expense_fixture()
       assert Expenses.get_expense!(expense.id) == expense
     end
   end
@@ -64,7 +64,9 @@ defmodule Splitmore.ExpensesTest do
     test "returns error changeset" do
       expense = expense_fixture()
       assert {:error, %Ecto.Changeset{}} = Expenses.update_expense(expense, @invalid_attrs)
-      assert expense == Expenses.get_expense!(expense.id)
+
+      assert Map.drop(expense, [:paid_by]) ==
+               Map.drop(Expenses.get_expense!(expense.id), [:paid_by])
     end
   end
 

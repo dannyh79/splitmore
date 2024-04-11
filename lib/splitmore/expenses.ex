@@ -40,7 +40,7 @@ defmodule Splitmore.Expenses do
   end
 
   @doc """
-  Gets a single expense.
+  Gets a single expense, with paid_by preloaded.
 
   Raises `Ecto.NoResultsError` if the Expense does not exist.
 
@@ -53,7 +53,7 @@ defmodule Splitmore.Expenses do
       ** (Ecto.NoResultsError)
 
   """
-  def get_expense!(id), do: Repo.get!(Expense, id)
+  def get_expense!(id), do: Repo.get!(Expense, id) |> Repo.preload(:paid_by)
 
   @doc """
   Creates a expense.

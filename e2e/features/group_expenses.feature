@@ -48,8 +48,8 @@ Feature: Group expenses Page
     When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
     And I click "早餐"
     Then I can see the expense:
-    | name | amount |
-    | 早餐 | 1234   |
+    | name | amount | paid_by                  |
+    | 早餐 | 1234   | chenghsuan.han@gmail.com |
   Scenario: I can edit group expenses
     Given there are users:
     | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
