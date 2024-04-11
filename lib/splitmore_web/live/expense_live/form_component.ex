@@ -1,6 +1,7 @@
 defmodule SplitmoreWeb.ExpenseLive.FormComponent do
   use SplitmoreWeb, :live_component
 
+  alias Splitmore.Accounts
   alias Splitmore.Expenses
 
   @impl true
@@ -21,6 +22,13 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:amount]} type="number" label="Amount" />
+        <.input
+          field={@form[:paid_by_id]}
+          type="select"
+          label="Paid by"
+          options={@users}
+          value={@current_user.id}
+        />
         <.input field={@form[:user_id]} type="hidden" value={@current_user.id} />
         <.input field={@form[:group_id]} type="hidden" value={@group_id} />
         <:actions>
@@ -29,6 +37,16 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
       </.simple_form>
     </div>
     """
+  end
+
+  @impl true
+  def mount(socket) do
+    paid_by_options =
+      Accounts.list_users()
+      |> Enum.map(fn u -> {u.email, u.id} end)
+      |> Enum.sort_by(fn {email, _} -> email end)
+
+    {:ok, assign(socket, :users, paid_by_options)}
   end
 
   @impl true

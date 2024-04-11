@@ -15,6 +15,7 @@
   >
     <:col :let={{_id, expense}} label="Name"><%= expense.name %></:col>
     <:col :let={{_id, expense}} label="Amount"><%= expense.amount %></:col>
+    <:col :let={{_id, _expense}} label="Paid by">chenghsuan.han@gmail.com</:col>
     <:action :let={{_id, expense}}>
       <div class="sr-only">
         <.link navigate={~p"/groups/#{@group_id}/expenses/#{expense}"}>Show</.link>

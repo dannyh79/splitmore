@@ -70,6 +70,7 @@ When('I add the group expenses via {string}:', async ({ page }, path: string, da
     await page.goto(path);
     await page.getByLabel('Name').fill(row.name);
     await page.getByLabel('Amount').fill(row.amount);
+    await page.getByLabel('Paid by').selectOption({ label: row.paid_by });
     await page.getByText('Save Expense').click();
   }
 });
@@ -139,13 +140,20 @@ Then(
   'I can see the expenses of group {string}',
   async ({ page }, name: string) => {
     const [rows] = await DB.query(`
-      SELECT expenses.name FROM expenses
+      SELECT expenses.name, expenses.amount, users.email AS paid_by FROM expenses
       JOIN groups ON expenses.group_id = groups.id
+      JOIN users ON expenses.paid_by_id = users.id
       WHERE groups.name = '${name}'
     `);
-    await expect(page.locator('#expenses > tr[id*="expenses-"]')).toContainText(
-      rows.map((r) => (r as { name: string }).name),
-    );
+    const assertions = (rows as Record<string, string>[])
+      .map((r) => Object.values(r))
+      .flat()
+      .map((s) =>
+        expect(
+          page.locator('#expenses > tr[id*="expenses-"]').getByText(s).first()
+        ).toBeVisible(),
+      );
+    Promise.all(assertions);
   },
 );
 
