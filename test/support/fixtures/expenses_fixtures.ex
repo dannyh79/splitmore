@@ -22,6 +22,12 @@ defmodule Splitmore.ExpensesFixtures do
     |> create_expense_with_fallback_attrs()
   end
 
+  def with_paid_by_expense_fixture(attrs) do
+    attrs
+    |> expense_fixture()
+    |> Splitmore.Repo.preload(:paid_by)
+  end
+
   defp create_expense_with_fallback_attrs(attrs) do
     {:ok, expense} =
       attrs

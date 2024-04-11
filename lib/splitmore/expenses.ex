@@ -22,7 +22,7 @@ defmodule Splitmore.Expenses do
   end
 
   @doc """
-  Returns the list of expenses of a group.
+  Returns the list of expenses of a group, with paid_by preloaded.
 
   ## Examples
 
@@ -31,7 +31,11 @@ defmodule Splitmore.Expenses do
 
   """
   def list_group_expenses(group_id) do
-    query = from e in Expense, where: e.group_id == ^group_id
+    query =
+      from e in Expense,
+        where: e.group_id == ^group_id,
+        preload: :paid_by
+
     Repo.all(query)
   end
 
