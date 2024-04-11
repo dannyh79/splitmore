@@ -81,9 +81,10 @@ defmodule SplitmoreWeb.GroupLiveTest do
     setup [:register_and_log_in_user, :create_group]
 
     test "displays group", %{conn: conn, group: group} do
-      {:ok, _show_live, html} = live(conn, ~p"/groups/#{group}")
+      {:ok, show_live, html} = live(conn, ~p"/groups/#{group}")
 
       assert html =~ "Show #{group.name} Expenses"
+      assert has_element?(show_live, "#group-summary-#{group.id}")
     end
 
     test "updates group within modal", %{conn: conn, group: group} do

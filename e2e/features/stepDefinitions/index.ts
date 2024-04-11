@@ -118,6 +118,10 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
 
+Then('I can see {string}', async ({ page }, text: string) => {
+  await expect(page.getByText(text)).toBeVisible();
+});
+
 Then('I can see the login button', async ({ page }) => {
   await expect(page.getByText(/Log in.*/i)).toBeVisible();
 });
