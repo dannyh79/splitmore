@@ -44,10 +44,7 @@ Given('there are groups:', async ({}, data: DataTable) => {
 VALUES `;
   const rows = data
     .hashes()
-    .map(
-      (d) =>
-        `('${d.id}', '${d.name}', '${d.inserted_at}', '${d.updated_at}')`,
-    )
+    .map((d) => `('${d.id}', '${d.name}', '${d.inserted_at}', '${d.updated_at}')`)
     .join(',');
   q += rows;
   await DB.query(q);
@@ -134,29 +131,24 @@ Then('I can see the expense:', async ({ page }, data: DataTable) => {
 });
 
 Then('I am redirected to {string}', async ({ page }, path: string) => {
-  await expect(page).toHaveURL(path)
+  await expect(page).toHaveURL(path);
 });
 
-Then(
-  'I can see the expenses of group {string}',
-  async ({ page }, name: string) => {
-    const [rows] = await DB.query(`
+Then('I can see the expenses of group {string}', async ({ page }, name: string) => {
+  const [rows] = await DB.query(`
       SELECT expenses.name, expenses.amount, users.email AS paid_by FROM expenses
       JOIN groups ON expenses.group_id = groups.id
       JOIN users ON expenses.paid_by_id = users.id
       WHERE groups.name = '${name}'
     `);
-    const assertions = (rows as Record<string, string>[])
-      .map((r) => Object.values(r))
-      .flat()
-      .map((s) =>
-        expect(
-          page.locator('#expenses > tr[id*="expenses-"]').getByText(s).first()
-        ).toBeVisible(),
-      );
-    Promise.all(assertions);
-  },
-);
+  const assertions = (rows as Record<string, string>[])
+    .map((r) => Object.values(r))
+    .flat()
+    .map((s) =>
+      expect(page.locator('#expenses > tr[id*="expenses-"]').getByText(s).first()).toBeVisible(),
+    );
+  Promise.all(assertions);
+});
 
 Then('I can see the groups', async ({ page }) => {
   const [rows] = await DB.query(`SELECT name FROM groups`);

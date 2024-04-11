@@ -80,8 +80,9 @@ defmodule Splitmore.MixProject do
       "e2e.test": [
         "ecto.create --quiet",
         "ecto.migrate --quiet",
-        "cmd --cd 'e2e' pnpm run e2e:test"
+        "cmd --cd 'e2e' pnpm run test"
       ],
+      "e2e.format": ["cmd --cd 'e2e' npx prettier -w ."],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind splitmore", "esbuild splitmore"],
       "assets.deploy": [

@@ -1,0 +1,13 @@
+{
+  "printWidth": 100,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "htmlWhitespaceSensitivity": "css",
+  "quoteProps": "consistent",
+  "proseWrap": "preserve",
+  "trailingComma": "all",
+  "useTabs": false,
+  "tabWidth": 2
+}
