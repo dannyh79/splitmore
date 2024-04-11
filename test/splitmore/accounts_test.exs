@@ -9,6 +9,13 @@ defmodule Splitmore.AccountsTest do
 
   @invalid_attrs %{name: nil, amount: nil}
 
+  describe "list_users/1" do
+    test "returns users" do
+      user = user_fixture()
+      assert Accounts.list_users() == [user]
+    end
+  end
+
   describe "get_user_by_email/1" do
     test "returns a user" do
       user = user_fixture()
