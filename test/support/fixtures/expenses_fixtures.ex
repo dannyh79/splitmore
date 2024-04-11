@@ -10,14 +10,15 @@ defmodule Splitmore.ExpensesFixtures do
   """
   def expense_fixture(attrs \\ %{})
 
-  def expense_fixture(%{user_id: id} = attrs) when is_binary(id),
-    do: create_expense_with_fallback_attrs(attrs)
+  def expense_fixture(%{user_id: id, paid_by_id: p_id} = attrs)
+      when is_binary(id) and is_binary(p_id),
+      do: create_expense_with_fallback_attrs(attrs)
 
   def expense_fixture(attrs) do
     user = user_fixture()
 
     attrs
-    |> Enum.into(%{user_id: user.id})
+    |> Enum.into(%{user_id: user.id, paid_by_id: user.id})
     |> create_expense_with_fallback_attrs()
   end
 

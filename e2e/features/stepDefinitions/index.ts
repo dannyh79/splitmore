@@ -26,13 +26,13 @@ VALUES `;
 });
 
 Given('there are expenses:', async ({}, data: DataTable) => {
-  let q = `INSERT INTO expenses (id, name, amount, group_id, user_id, inserted_at, updated_at)
+  let q = `INSERT INTO expenses (id, name, amount, group_id, user_id, paid_by_id, inserted_at, updated_at)
 VALUES `;
   const rows = data
     .hashes()
     .map(
       (d) =>
-        `('${d.id}', '${d.name}', ${d.amount}, '${d.group_id}', '${d.user_id}', '${d.inserted_at}', '${d.updated_at}')`,
+        `('${d.id}', '${d.name}', ${d.amount}, '${d.group_id}', '${d.user_id}', '${d.paid_by_id}', '${d.inserted_at}', '${d.updated_at}')`,
     )
     .join(',');
   q += rows;

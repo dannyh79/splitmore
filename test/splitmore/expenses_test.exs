@@ -37,12 +37,13 @@ defmodule Splitmore.ExpensesTest do
   describe "create_expense/1" do
     test "creates an expense" do
       user = user_fixture()
-      valid_attrs = %{name: "some name", amount: 42, user_id: user.id}
+      valid_attrs = %{name: "some name", amount: 42, user_id: user.id, paid_by_id: user.id}
 
       assert {:ok, %Expense{} = expense} = Expenses.create_expense(valid_attrs)
       assert expense.name == "some name"
       assert expense.amount == 42
       assert expense.user_id == user.id
+      assert expense.paid_by_id == user.id
     end
 
     test "returns error changeset" do
