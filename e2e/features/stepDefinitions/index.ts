@@ -118,8 +118,13 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
   await expect(page).toHaveTitle(title);
 });
 
-Then('I can see {string}', async ({ page }, text: string) => {
+Then('I can see {string}:', async ({ page }, text: string, data: DataTable) => {
   await expect(page.getByText(text)).toBeVisible();
+
+  const assertions = data
+    .raw()
+    .map((t) => expect(page.locator('main')).toContainText(t, { useInnerText: true }));
+  Promise.all(assertions);
 });
 
 Then('I can see the login button', async ({ page }) => {

@@ -20,7 +20,8 @@ Feature: Group expenses Page
     When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
     Then I can see the title "Show 宮妙少年 Expenses"
     And I can see the expenses of group "宮妙少年"
-    And I can see "Summary"
+    And I can see "Summary":
+    | chenghsuan.han@gmail.com owes another@example.com -$2,099 |
   Scenario: I can add group expenses
     Given there are users:
     | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
