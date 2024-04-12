@@ -135,7 +135,7 @@ Then('I can see the expense:', async ({ page }, data: DataTable) => {
   const assertions = data
     .rows()
     .flat()
-    .map((text) => expect(page.locator('main').getByText(text)).toBeVisible());
+    .map((t) => expect(page.locator('main')).toContainText(t, { useInnerText: true }));
   Promise.all(assertions);
 });
 
