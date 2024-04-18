@@ -38,8 +38,10 @@ defmodule SplitmoreWeb.GroupLive.Show do
     """
   end
 
+  # TODO: render decimals
   defp to_currency(amount) do
     amount
+    |> round()
     |> abs()
     |> Integer.to_charlist()
     |> Enum.reverse()
