@@ -9,6 +9,7 @@ After(async () => {
   await DB.query('DELETE FROM expenses');
   await DB.query('DELETE FROM groups');
   await DB.query('DELETE FROM users');
+  await DB.query('DELETE FROM groups_users');
 });
 
 Given('there are users:', async ({}, data: DataTable) => {
