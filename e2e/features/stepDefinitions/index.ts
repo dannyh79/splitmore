@@ -1,7 +1,7 @@
 import { DataTable } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
-import DB from '../support/db';
+import DB, { QueryTypes } from '../support/db';
 
 const { After, Given, Then, When } = createBdd();
 
@@ -46,6 +46,26 @@ VALUES `;
     .hashes()
     .map((d) => `('${d.id}', '${d.name}', '${d.inserted_at}', '${d.updated_at}')`)
     .join(',');
+  q += rows;
+  await DB.query(q);
+});
+
+Given('there are users in group {string}:', async ({}, groupName: string, data: DataTable) => {
+  const [group] = await DB.query<{ id: string }>(
+    `SELECT id FROM groups WHERE name = '${groupName}'`,
+    { type: QueryTypes.SELECT },
+  );
+  const userIds = await DB.query<{ id: string }>(
+    `SELECT id FROM users WHERE email IN (${data
+      .raw()
+      .flat()
+      .map((e) => `'${e}'`)
+      .join(',')})`,
+    { type: QueryTypes.SELECT },
+  );
+  let q = `INSERT INTO groups_users (group_id, user_id)
+VALUES `;
+  const rows = userIds.map((u) => `('${group.id}', '${u.id}')`).join(',');
   q += rows;
   await DB.query(q);
 });

@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { QueryTypes as SequelizeQueryTypes, Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize(
   process.env.PGDATABASE ?? 'splitmore_test',
@@ -12,3 +12,5 @@ const sequelize = new Sequelize(
 );
 
 export default sequelize;
+
+export const QueryTypes = SequelizeQueryTypes;

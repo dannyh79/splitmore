@@ -11,6 +11,9 @@ Feature: Group expenses Page
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
     | 199862b8-5789-4290-9747-a95573bede66 | 鼠窩     | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
+    | another@example.com      |
     And there are expenses:
     | id                                   | name | amount | user_id                              | group_id                             | paid_by_id                           | inserted_at         | updated_at          |
     | f185f505-d8c0-43ce-9e7b-bb9e8909072d | 早餐 | 1234   | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
@@ -44,6 +47,8 @@ Feature: Group expenses Page
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
     And there are expenses:
     | id                                   | name | amount | user_id                              | group_id                             | paid_by_id                           | inserted_at         | updated_at          |
     | f185f505-d8c0-43ce-9e7b-bb9e8909072d | 早餐 | 1234   | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
@@ -61,6 +66,8 @@ Feature: Group expenses Page
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
     And there are expenses:
     | id                                   | name | amount | user_id                              | group_id                             | paid_by_id                           | inserted_at         | updated_at          |
     | f185f505-d8c0-43ce-9e7b-bb9e8909072d | 早餐 | 1234   | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
@@ -78,6 +85,8 @@ Feature: Group expenses Page
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
     And there are expenses:
     | id                                   | name | amount | user_id                              | group_id                             | paid_by_id                           | inserted_at         | updated_at          |
     | f185f505-d8c0-43ce-9e7b-bb9e8909072d | 早餐 | 1234   | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
