@@ -77,6 +77,8 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
   defp save_expense(socket, :edit, expense_params) do
     case Expenses.update_expense(socket.assigns.expense, expense_params) do
       {:ok, expense} ->
+        # TODO: wrap Expenses.update_expense/1 and Groups.maybe_add_users_to_group/1 in Ecto.Multi
+        Groups.maybe_add_users_to_group(expense_params)
         notify_parent({:saved, expense})
 
         {:noreply,
