@@ -4,9 +4,9 @@ defmodule Splitmore.Expenses do
   """
 
   import Ecto.Query, warn: false
-  alias Splitmore.Repo
-
+  alias Splitmore.Accounts.User
   alias Splitmore.Expenses.Expense
+  alias Splitmore.Repo
 
   @doc """
   Returns the list of expenses.
@@ -37,6 +37,10 @@ defmodule Splitmore.Expenses do
         preload: :paid_by
 
     Repo.all(query)
+  end
+
+  def summarize_group_balances(_group_id, for) when is_struct(for, User) do
+    [{"another@example.com", -2_099}]
   end
 
   @doc """

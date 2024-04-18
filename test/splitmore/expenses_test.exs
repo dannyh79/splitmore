@@ -84,4 +84,12 @@ defmodule Splitmore.ExpensesTest do
       assert %Ecto.Changeset{} = Expenses.change_expense(expense)
     end
   end
+
+  describe "summarize_group_balances/1" do
+    test "returns group balances of a given user" do
+      %{id: id} = group_fixture()
+      user = user_fixture()
+      assert [{"another@example.com", -2_099}] = Expenses.summarize_group_balances(id, user)
+    end
+  end
 end

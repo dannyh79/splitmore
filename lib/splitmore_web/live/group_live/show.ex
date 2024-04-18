@@ -6,13 +6,14 @@ defmodule SplitmoreWeb.GroupLive.Show do
 
   @impl true
   def mount(%{"id" => id} = _params, _session, socket) do
-    summary = {socket.assigns.current_user.email, [{"another@example.com", -2_099}]}
+    current_user = socket.assigns.current_user
+    balances = Expenses.summarize_group_balances(id, current_user)
 
     socket =
       socket
       |> assign(
         group_id: id,
-        summary: summary
+        summary: {current_user, balances}
       )
 
     {:ok, socket}
@@ -20,7 +21,7 @@ defmodule SplitmoreWeb.GroupLive.Show do
 
   defp summary_section(assigns) do
     ~H"""
-    <% {current_user, balances} = assigns.summary %>
+    <% {%{email: current_user}, balances} = assigns.summary %>
     <div id={@id}>
       <.header>Summary</.header>
       <ul>
