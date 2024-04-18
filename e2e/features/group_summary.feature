@@ -18,4 +18,4 @@ Feature: Group Summary Section
     Then I can see the title "Show 宮妙少年 Expenses"
     And I can see the expenses of group "宮妙少年"
     And I can see "Summary":
-    | chenghsuan.han@gmail.com owes another@example.com -$2,099 |
+    | chenghsuan.han@gmail.com owes another@example.com $2,099 |

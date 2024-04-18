@@ -20,12 +20,17 @@ defmodule SplitmoreWeb.GroupLive.Show do
 
   defp summary_section(assigns) do
     ~H"""
+    <% {current_user, balances} = assigns.summary %>
     <div id={@id}>
       <.header>Summary</.header>
       <ul>
-        <li :for={{name, amount} <- elem(@summary, 1)} class="list-disc" id={"balance-#{name}"}>
-          <b><%= elem(@summary, 0) %></b>
-          owes <b><%= name %></b> <span class="ml-2"><%= to_currency(amount) %></span>
+        <li :for={{name, balance} <- balances} class="list-disc" id={"balance-#{name}"}>
+          <%= if balance > 0 do %>
+            <b><%= name %></b> owes <b><%= current_user %></b>
+          <% else %>
+            <b><%= current_user %></b> owes <b><%= name %></b>
+          <% end %>
+          &nbsp;<span class="ml-2"><%= to_currency(balance) %></span>
         </li>
       </ul>
     </div>
@@ -33,8 +38,6 @@ defmodule SplitmoreWeb.GroupLive.Show do
   end
 
   defp to_currency(amount) do
-    sign = maybe_minus_sign(amount)
-
     amount
     |> abs()
     |> Integer.to_charlist()
@@ -42,11 +45,8 @@ defmodule SplitmoreWeb.GroupLive.Show do
     |> Enum.chunk_every(3)
     |> Enum.join(",")
     |> String.reverse()
-    |> (&"#{sign}$#{&1}").()
+    |> (&"$#{&1}").()
   end
-
-  defp maybe_minus_sign(amount) when amount < 0, do: "-"
-  defp maybe_minus_sign(_), do: nil
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
