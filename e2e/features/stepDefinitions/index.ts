@@ -1,5 +1,5 @@
 import { DataTable } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
 import DB, { QueryTypes } from '../support/db';
 
@@ -89,7 +89,7 @@ When('I add the group expenses via {string}:', async ({ page }, path: string, da
 
     await page.getByLabel('Name').fill(row.name);
     await page.getByLabel('Amount').fill(row.amount);
-    await page.getByLabel('Paid by').selectOption({ label: row.paid_by });
+    await selectFromDropdown(page, 'Paid by', row.paid_by);
     await page.getByText('Save Expense').click();
   }
 });
@@ -101,9 +101,22 @@ When('I update the expense:', async ({ page }, data: DataTable) => {
   const [row] = data.hashes();
   await page.getByLabel('Name').fill(row.name);
   await page.getByLabel('Amount').fill(row.amount);
-  await page.getByLabel('Paid by').selectOption({ label: row.paid_by });
+  await selectFromDropdown(page, 'Paid by', row.paid_by);
   await page.getByText('Save Expense').click();
 });
+
+// NOTE: workaround for page.getByLabel().selectOption() not able to persist selected state
+async function selectFromDropdown(
+  page: Page,
+  dropdownLabel: string,
+  optionLabel: string,
+): Promise<void> {
+  const selectByLabel = (e: HTMLSelectElement, label: string) => {
+    const option = Array.from(e.options).find((o) => o.label == label)!;
+    option.selected = true;
+  };
+  await page.getByLabel(dropdownLabel).evaluate(selectByLabel, optionLabel);
+}
 
 When('I delete the expense {string}', async ({ page }, name: string) => {
   const deleteButton = page
