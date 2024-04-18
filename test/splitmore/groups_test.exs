@@ -5,6 +5,7 @@ defmodule Splitmore.GroupsTest do
   alias Splitmore.Groups.Group
 
   import Splitmore.GroupsFixtures
+  import Splitmore.UsersFixtures
 
   @invalid_attrs %{name: nil}
 
@@ -63,6 +64,38 @@ defmodule Splitmore.GroupsTest do
     test "returns a group changeset" do
       group = group_fixture()
       assert %Ecto.Changeset{} = Groups.change_group(group)
+    end
+  end
+
+  describe "maybe_add_users_to_group/1" do
+    test "returns {:ok}" do
+      group = group_fixture()
+      user = user_fixture()
+      paid_by = user_fixture()
+
+      assert {:ok} =
+               Groups.maybe_add_users_to_group(%{
+                 "group_id" => group.id,
+                 "user_id" => user.id,
+                 "paid_by_id" => paid_by.id
+               })
+    end
+
+    test "returns {:ok} when users are already in the group" do
+      group = group_fixture()
+      user = user_fixture()
+      paid_by = user_fixture()
+
+      Splitmore.Repo.query!("INSERT INTO groups_users (group_id, user_id) VALUES
+        ('#{group.id}', '#{user.id}'),
+        ('#{group.id}', '#{paid_by.id}')")
+
+      assert {:ok} =
+               Groups.maybe_add_users_to_group(%{
+                 "group_id" => group.id,
+                 "user_id" => user.id,
+                 "paid_by_id" => paid_by.id
+               })
     end
   end
 end

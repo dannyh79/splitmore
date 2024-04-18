@@ -4,9 +4,9 @@ defmodule Splitmore.Groups do
   """
 
   import Ecto.Query, warn: false
-  alias Splitmore.Repo
-
+  alias Splitmore.Accounts.User
   alias Splitmore.Groups.Group
+  alias Splitmore.Repo
 
   @doc """
   Returns the list of groups.
@@ -100,5 +100,46 @@ defmodule Splitmore.Groups do
   """
   def change_group(%Group{} = group, attrs \\ %{}) do
     Group.changeset(group, attrs)
+  end
+
+  def maybe_add_users_to_group(
+        %{"group_id" => group_id, "user_id" => user_id, "paid_by_id" => paid_by_id} =
+          _expense_params
+      ) do
+    group =
+      Group
+      |> Repo.get!(group_id)
+      |> Repo.preload(:users)
+
+    user = Repo.get!(User, user_id)
+    paid_by = Repo.get!(User, paid_by_id)
+    maybe_add_user_to_group(group, user)
+    maybe_add_user_to_group(group, paid_by)
+  end
+
+  defp maybe_add_user_to_group(%Group{} = group, %User{} = user) do
+    if user_in_group?(group, user) do
+      {:ok}
+    else
+      add_user_to_group(group, user)
+    end
+  end
+
+  defp user_in_group?(%Group{} = group, %User{} = user) do
+    Enum.any?(group.users, &(&1.id == user.id))
+  end
+
+  defp add_user_to_group(%Group{} = group, %User{} = user) do
+    %{users: users} =
+      group
+      |> Repo.preload(:users)
+
+    {:ok, _} =
+      group
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:users, users ++ [user])
+      |> Repo.update()
+
+    {:ok}
   end
 end

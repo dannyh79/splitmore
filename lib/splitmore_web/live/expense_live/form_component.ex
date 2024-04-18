@@ -3,6 +3,7 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
 
   alias Splitmore.Accounts
   alias Splitmore.Expenses
+  alias Splitmore.Groups
 
   @impl true
   def render(assigns) do
@@ -91,6 +92,8 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
   defp save_expense(socket, :new, expense_params) do
     case Expenses.create_expense(expense_params) do
       {:ok, expense} ->
+        # TODO: wrap Expenses.create_expense/1 and Groups.maybe_add_users_to_group/1 in Ecto.Multi
+        Groups.maybe_add_users_to_group(expense_params)
         notify_parent({:saved, expense})
 
         {:noreply,
