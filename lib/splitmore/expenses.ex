@@ -3,8 +3,11 @@ defmodule Splitmore.Expenses do
   The Expenses context.
   """
 
+  import Ecto, only: [assoc: 2]
   import Ecto.Query, warn: false
+  alias Splitmore.Groups.Group
   alias Splitmore.Accounts.User
+  alias Splitmore.BookKeeper
   alias Splitmore.Expenses.Expense
   alias Splitmore.Repo
 
@@ -39,8 +42,25 @@ defmodule Splitmore.Expenses do
     Repo.all(query)
   end
 
-  def summarize_group_balances(_group_id, for) when is_struct(for, User) do
-    [{"another@example.com", -2_099}]
+  def summarize_group_balances(group_id, for) when is_struct(for, User) do
+    expenses = p_list_group_expenses(group_id)
+    group_users = p_list_group_users(group_id)
+
+    BookKeeper.calculate_balances(expenses, group_users, for)
+  end
+
+  defp p_list_group_users(group_id) do
+    group = Repo.get(Group, group_id)
+    Repo.all(assoc(group, :users))
+  end
+
+  defp p_list_group_expenses(group_id) do
+    query =
+      from e in Expense,
+        where: e.group_id == ^group_id,
+        preload: :paid_by
+
+    Repo.all(query)
   end
 
   @doc """

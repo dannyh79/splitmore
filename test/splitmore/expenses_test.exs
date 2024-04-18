@@ -88,8 +88,21 @@ defmodule Splitmore.ExpensesTest do
   describe "summarize_group_balances/1" do
     test "returns group balances of a given user" do
       %{id: id} = group_fixture()
-      user = user_fixture()
-      assert [{"another@example.com", -2_099}] = Expenses.summarize_group_balances(id, user)
+      user1 = user_fixture()
+      user2 = user_fixture(email: "another@example.com")
+
+      Splitmore.Repo.query!("INSERT INTO groups_users (group_id, user_id) VALUES
+        ('#{id}', '#{user1.id}'),
+        ('#{id}', '#{user2.id}')
+        ")
+
+      expense1 = expense_fixture(user_id: user1.id, paid_by_id: user1.id, group_id: id, amount: 2)
+
+      expense2 =
+        expense_fixture(user_id: user1.id, paid_by_id: user2.id, group_id: id, amount: 4200)
+
+      expected = [{user2.email, -(expense2.amount - expense1.amount) / 2}]
+      assert expected == Expenses.summarize_group_balances(id, user1)
     end
   end
 end
