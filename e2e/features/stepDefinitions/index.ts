@@ -85,6 +85,8 @@ When('I have logged in as {string}', async ({ page }, email: string) => {
 When('I add the group expenses via {string}:', async ({ page }, path: string, data: DataTable) => {
   for (const row of data.hashes()) {
     await page.goto(path);
+    await page.waitForLoadState('networkidle');
+
     await page.getByLabel('Name').fill(row.name);
     await page.getByLabel('Amount').fill(row.amount);
     await page.getByLabel('Paid by').selectOption({ label: row.paid_by });
@@ -94,6 +96,7 @@ When('I add the group expenses via {string}:', async ({ page }, path: string, da
 
 When('I update the expense:', async ({ page }, data: DataTable) => {
   await page.getByText('Edit', { exact: true }).click();
+  await page.waitForLoadState('networkidle');
 
   const [row] = data.hashes();
   await page.getByLabel('Name').fill(row.name);
@@ -113,6 +116,7 @@ When('I delete the expense {string}', async ({ page }, name: string) => {
 When('I add the groups via {string}:', async ({ page }, path: string, data: DataTable) => {
   for (const row of data.hashes()) {
     await page.goto(path);
+    await page.waitForLoadState('networkidle');
     await page.getByLabel('Name').fill(row.name);
     await page.getByText('Save Group').click();
   }
@@ -120,6 +124,7 @@ When('I add the groups via {string}:', async ({ page }, path: string, data: Data
 
 When('I update the group:', async ({ page }, data: DataTable) => {
   await page.getByText('Edit').click();
+  await page.waitForLoadState('networkidle');
 
   const [row] = data.hashes();
   await page.getByLabel('Name').fill(row.name);
