@@ -73,6 +73,15 @@ defmodule SplitmoreWeb.GroupLive.Show do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("save", _, socket) do
+    current_user = socket.assigns.current_user
+    balances = Expenses.summarize_group_balances(socket.assigns.group_id, current_user)
+
+    socket = assign(socket, summary: {current_user, balances})
+    {:noreply, socket}
+  end
+
   defp page_title(%{live_action: :show}, %{name: name}), do: "Show #{name} Expenses"
   defp page_title(%{live_action: :edit}, _), do: "Edit Group"
 end
