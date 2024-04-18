@@ -66,6 +66,10 @@ defmodule SplitmoreWeb.GroupLive.Show do
     expense = Expenses.get_expense!(id)
     {:ok, _} = Expenses.delete_expense(expense)
 
+    current_user = socket.assigns.current_user
+    balances = Expenses.summarize_group_balances(socket.assigns.group_id, current_user)
+
+    socket = assign(socket, summary: {current_user, balances})
     {:noreply, socket}
   end
 
