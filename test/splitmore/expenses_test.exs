@@ -89,7 +89,7 @@ defmodule Splitmore.ExpensesTest do
     test "returns group balances of a given user" do
       %{id: id} = group_fixture()
       user1 = user_fixture()
-      user2 = user_fixture(email: "another@example.com")
+      user2 = user_fixture()
 
       Splitmore.Repo.query!("INSERT INTO groups_users (group_id, user_id) VALUES
         ('#{id}', '#{user1.id}'),
