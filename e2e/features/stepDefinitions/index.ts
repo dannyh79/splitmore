@@ -162,6 +162,9 @@ Then('I can see the title {string}', async ({ page }, title: string) => {
 });
 
 Then('I can see {string}:', async ({ page }, text: string, data: DataTable) => {
+  // FIXME: Fix this workaround that waits for liveview page update
+  await page.waitForTimeout(250);
+
   await expect(page.getByText(text)).toBeVisible();
 
   const assertions = data
