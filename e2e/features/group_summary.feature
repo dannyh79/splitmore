@@ -82,3 +82,27 @@ Feature: Group Summary Section
     Then I can see the title "Show 宮妙少年 Expenses"
     And I can see "Summary":
     | chenghsuan.han@gmail.com owes another@example.com $2,716 |
+  Scenario: I can see multiple balances
+    Given there are users:
+    | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
+    | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | chenghsuan.han@gmail.com | github   | ghu_aaaaaaWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 5a42823b-68af-4a6e-8bcf-75991930a119 | sdav19470@gmail.com      | github   | ghu_bbbbbbWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 8dec9de8-da12-42c4-b80b-c40cf9448d77 | jimmy2822@gmail.com      | github   | ghu_ccccccWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are groups:
+    | id                                   | name     | inserted_at         | updated_at          |
+    | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And there are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
+    | sdav19470@gmail.com      |
+    | jimmy2822@gmail.com      |
+    And there are expenses:
+    | id                                   | name | amount | user_id                              | group_id                             | paid_by_id                           | inserted_at         | updated_at          |
+    | f185f505-d8c0-43ce-9e7b-bb9e8909072d | 早餐 | 3333   | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 1024914b-ee65-4728-b687-8341f5affa89 | 午餐 | 1236   | 5a42823b-68af-4a6e-8bcf-75991930a119 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 5a42823b-68af-4a6e-8bcf-75991930a119 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    | 5a42823b-68af-4a6e-8bcf-75991930a119 | 晚餐 | 6666   | 8dec9de8-da12-42c4-b80b-c40cf9448d77 | 2fd1e6d3-1dea-46ea-8e52-64d367198969 | 8dec9de8-da12-42c4-b80b-c40cf9448d77 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And I have logged in as "chenghsuan.han@gmail.com"
+    When I visit "/groups/2fd1e6d3-1dea-46ea-8e52-64d367198969"
+    Then I can see the title "Show 宮妙少年 Expenses"
+    And I can see "Summary":
+    | sdav19470@gmail.com owes chenghsuan.han@gmail.com $699 |
+    | chenghsuan.han@gmail.com owes jimmy2822@gmail.com $1,111 |
