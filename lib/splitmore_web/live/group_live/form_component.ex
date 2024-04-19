@@ -5,6 +5,23 @@ defmodule SplitmoreWeb.GroupLive.FormComponent do
 
   @impl true
   def render(assigns) do
+    assigns =
+      assign(assigns,
+        group: %{
+          assigns.group
+          | users: [
+              {
+                "930ec9de-fac5-4d21-88da-ee41ea5f1615",
+                %{admin?: true, email: "chenghsuan.han@gmail.com"}
+              },
+              {
+                "2fd1e6d3-1dea-46ea-8e52-64d367198969",
+                %{admin?: false, email: "another@example.com"}
+              }
+            ]
+        }
+      )
+
     ~H"""
     <div>
       <.header>
@@ -20,6 +37,12 @@ defmodule SplitmoreWeb.GroupLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
+        <.table id="group_users" rows={@group.users}>
+          <:col :let={{id, user}} label="Admin">
+            <.input type="checkbox" name={id} checked={user.admin?} />
+          </:col>
+          <:col :let={{_id, user}} label="Email"><%= user.email %></:col>
+        </.table>
         <:actions>
           <.button phx-disable-with="Saving...">Save Group</.button>
         </:actions>

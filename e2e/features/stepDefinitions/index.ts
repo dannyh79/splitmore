@@ -173,6 +173,16 @@ Then('I can see {string}:', async ({ page }, text: string, data: DataTable) => {
   Promise.all(assertions);
 });
 
+Then('I can see dialog {string}:', async ({ page }, text: string, data: DataTable) => {
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+
+  const assertions = [text, ...data.raw()].map((t) =>
+    expect(dialog).toContainText(t, { useInnerText: true }),
+  );
+  Promise.all(assertions);
+});
+
 Then('I can see the login button', async ({ page }) => {
   await expect(page.getByText(/Log in.*/i)).toBeVisible();
 });
