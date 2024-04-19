@@ -121,7 +121,7 @@ defmodule Splitmore.Groups do
     if user_in_group?(group, user) do
       {:ok}
     else
-      add_user_to_group(group, user)
+      p_add_user_to_group(group, user)
     end
   end
 
@@ -129,7 +129,7 @@ defmodule Splitmore.Groups do
     Enum.any?(group.users, &(&1.id == user.id))
   end
 
-  defp add_user_to_group(%Group{} = group, %User{} = user) do
+  defp p_add_user_to_group(%Group{} = group, %User{} = user) do
     %{users: users} =
       group
       |> Repo.preload(:users)
@@ -141,5 +141,13 @@ defmodule Splitmore.Groups do
       |> Repo.update()
 
     {:ok}
+  end
+
+  def add_user_to_group(%Group{} = group, %User{} = user) do
+    group
+    |> Repo.preload(:users)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:users, [user])
+    |> Repo.update()
   end
 end

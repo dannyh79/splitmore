@@ -70,6 +70,8 @@ defmodule SplitmoreWeb.GroupLive.FormComponent do
   defp save_group(socket, :new, group_params) do
     case Groups.create_group(group_params) do
       {:ok, group} ->
+        # TODO: wrap Groups.create_group/1 and Groups.add_user_to_group/2 in Ecto.Multi
+        Groups.add_user_to_group(group, socket.assigns.current_user)
         notify_parent({:saved, group})
 
         {:noreply,

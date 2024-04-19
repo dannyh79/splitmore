@@ -98,4 +98,13 @@ defmodule Splitmore.GroupsTest do
                })
     end
   end
+
+  describe "add_user_to_group/2" do
+    test "returns {:ok, %Group{}}" do
+      group = group_fixture()
+      user = user_fixture()
+
+      assert {:ok, %Group{}} = Groups.add_user_to_group(group, user)
+    end
+  end
 end

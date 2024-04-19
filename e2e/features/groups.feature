@@ -24,6 +24,8 @@ Feature: Groups Page
     | name     |
     | 宮妙少年 |
     Then I can see the groups
+    And There are users in group "宮妙少年":
+    | chenghsuan.han@gmail.com |
   Scenario: I can edit groups
     Given there are users:
     | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |

@@ -211,3 +211,20 @@ Then('I can see the groups', async ({ page }) => {
     rows.map((r) => (r as { name: string }).name),
   );
 });
+
+Then('There are users in group {string}:', async ({}, name: string, data: DataTable) => {
+  const [{ count }] = await DB.query<{ count: number }>(
+    `
+    SELECT COUNT(*) FROM groups_users
+    JOIN users ON groups_users.user_id = users.id
+    JOIN groups ON groups_users.group_id = groups.id
+    WHERE groups.name = '${name}'
+    AND users.email IN (${data
+      .raw()
+      .flat()
+      .map((e) => `'${e}'`)
+      .join(',')})`,
+    { type: QueryTypes.SELECT },
+  );
+  expect(Number(count)).toEqual(data.raw().length);
+});
