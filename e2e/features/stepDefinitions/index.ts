@@ -124,6 +124,8 @@ When('I delete the expense {string}', async ({ page }, name: string) => {
     .locator(`#expenses > tr[id*="expenses-"]`)
     .filter({ hasText: name })
     .getByText('Delete');
+
+  page.once('dialog', (dialog) => dialog.accept());
   await deleteButton.click();
 });
 
@@ -150,6 +152,8 @@ When('I delete the group {string}', async ({ page }, name: string) => {
     .locator(`#groups > tr[id*="groups-"]`)
     .filter({ hasText: name })
     .getByText('Delete');
+
+  page.once('dialog', (dialog) => dialog.accept());
   await deleteButton.click();
 });
 
