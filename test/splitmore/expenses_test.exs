@@ -6,6 +6,7 @@ defmodule Splitmore.ExpensesTest do
 
   import Splitmore.ExpensesFixtures
   import Splitmore.GroupsFixtures
+  import Splitmore.TestUtils, only: [drop: 2]
   import Splitmore.UsersFixtures
 
   @invalid_attrs %{name: nil, amount: nil}
@@ -65,8 +66,7 @@ defmodule Splitmore.ExpensesTest do
       expense = expense_fixture()
       assert {:error, %Ecto.Changeset{}} = Expenses.update_expense(expense, @invalid_attrs)
 
-      assert Map.drop(expense, [:paid_by]) ==
-               Map.drop(Expenses.get_expense!(expense.id), [:paid_by])
+      assert drop(expense, [:paid_by]) == drop(Expenses.get_expense!(expense.id), [:paid_by])
     end
   end
 
