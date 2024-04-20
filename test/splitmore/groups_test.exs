@@ -5,6 +5,7 @@ defmodule Splitmore.GroupsTest do
   alias Splitmore.Groups.Group
 
   import Splitmore.GroupsFixtures
+  import Splitmore.TestUtils, only: [drop: 2]
   import Splitmore.UsersFixtures
 
   @invalid_attrs %{name: nil}
@@ -20,6 +21,22 @@ defmodule Splitmore.GroupsTest do
     test "returns the group with given id" do
       group = group_fixture()
       assert Groups.get_group!(group.id) == group
+    end
+  end
+
+  describe "get_group_with_users!/1" do
+    test "returns the group with its associated users" do
+      group = group_fixture()
+      user = user_fixture()
+
+      Splitmore.Repo.query!(
+        "INSERT INTO groups_users (group_id, user_id) VALUES ('#{group.id}', '#{user.id}')"
+      )
+
+      result = Groups.get_group_with_users!(group.id)
+      assert drop(result, [:users]) == drop(group, [:users])
+      # TODO: update this
+      assert Enum.map(result.users, fn u -> drop(u, [:admin?]) end) == [user]
     end
   end
 

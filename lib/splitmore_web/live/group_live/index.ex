@@ -17,7 +17,7 @@ defmodule SplitmoreWeb.GroupLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Group")
-    |> assign(:group, Groups.get_group!(id))
+    |> assign(:group, Groups.get_group_with_users!(id))
   end
 
   defp apply_action(socket, :new, _params) do

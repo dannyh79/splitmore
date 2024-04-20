@@ -53,7 +53,7 @@ defmodule SplitmoreWeb.GroupLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    group = Groups.get_group!(id)
+    group = Groups.get_group_with_users!(id)
 
     {:noreply,
      socket

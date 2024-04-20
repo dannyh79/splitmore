@@ -37,6 +37,16 @@ defmodule Splitmore.Groups do
   """
   def get_group!(id), do: Repo.get!(Group, id)
 
+  def get_group_with_users!(id) do
+    group =
+      Group
+      |> Repo.get!(id)
+      |> Repo.preload(:users)
+
+    users_with_stubbed_field = Enum.map(group.users, &Map.put(&1, :admin?, true))
+    %{group | users: users_with_stubbed_field}
+  end
+
   @doc """
   Creates a group.
 
