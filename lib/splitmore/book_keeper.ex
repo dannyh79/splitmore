@@ -8,8 +8,8 @@ defmodule Splitmore.BookKeeper do
 
     others =
       people_involved
-      |> Enum.drop_while(fn e -> e.email == me end)
-      |> Enum.map(fn e -> e.email end)
+      |> Enum.filter(fn u -> u.email != me end)
+      |> Enum.map(fn u -> u.email end)
 
     map = Map.new(others, &{&1, 0})
 
