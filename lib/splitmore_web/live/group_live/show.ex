@@ -1,6 +1,7 @@
 defmodule SplitmoreWeb.GroupLive.Show do
   use SplitmoreWeb, :live_view
 
+  alias Phoenix.PubSub
   alias Splitmore.Expenses
   alias Splitmore.Groups
 
@@ -8,6 +9,10 @@ defmodule SplitmoreWeb.GroupLive.Show do
   def mount(%{"id" => id} = _params, _session, socket) do
     current_user = socket.assigns.current_user
     balances = Expenses.summarize_group_balances(id, current_user)
+
+    if connected?(socket) do
+      PubSub.subscribe(Splitmore.PubSub, "group:#{id}")
+    end
 
     socket =
       socket
@@ -66,20 +71,26 @@ defmodule SplitmoreWeb.GroupLive.Show do
     expense = Expenses.get_expense!(id)
     {:ok, _} = Expenses.delete_expense(expense)
 
-    current_user = socket.assigns.current_user
-    balances = Expenses.summarize_group_balances(socket.assigns.group_id, current_user)
-
-    socket = assign(socket, summary: {current_user, balances})
-    {:noreply, socket}
+    {:noreply, assign_socket(socket)}
   end
 
   @impl true
   def handle_event("save", _, socket) do
+    {:noreply, assign_socket(socket)}
+  end
+
+  @impl true
+  def handle_info({:expense_updated}, socket) do
+    socket = assign_socket(socket)
+    send_update(SplitmoreWeb.GroupLive.ExpensesComponent, id: "#{socket.assigns.group_id}-expenses", group_id: socket.assigns.group_id)
+    {:noreply, socket}
+  end
+
+  defp assign_socket(socket) do
     current_user = socket.assigns.current_user
     balances = Expenses.summarize_group_balances(socket.assigns.group_id, current_user)
 
-    socket = assign(socket, summary: {current_user, balances})
-    {:noreply, socket}
+    assign(socket, summary: {current_user, balances})
   end
 
   defp page_title(%{live_action: :show}, %{name: name}), do: "Show #{name} Expenses"
