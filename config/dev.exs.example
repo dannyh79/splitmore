@@ -79,7 +79,7 @@ config :phoenix, :plug_init_mode, :runtime
 # Include HEEx debug annotations as HTML comments in rendered markup
 config :phoenix_live_view, :debug_heex_annotations, true
 
-# Replace client_id and client_secret by actual value
+# Create client under "OAuth Apps": https://github.com/settings/developers
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
   client_id: "YOUR-GITHUB-OAUTH-APP-ID",
   client_secret: "YOUR-GITHUB-OAUTH-APP-SECRET",
