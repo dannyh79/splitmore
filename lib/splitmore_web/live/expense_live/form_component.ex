@@ -1,6 +1,7 @@
 defmodule SplitmoreWeb.ExpenseLive.FormComponent do
   use SplitmoreWeb, :live_component
 
+  alias Phoenix.PubSub
   alias Splitmore.Accounts
   alias Splitmore.Expenses
   alias Splitmore.Groups
@@ -97,6 +98,8 @@ defmodule SplitmoreWeb.ExpenseLive.FormComponent do
         # TODO: wrap Expenses.create_expense/1 and Groups.maybe_add_users_to_group/1 in Ecto.Multi
         Groups.maybe_add_users_to_group(expense_params)
         notify_parent({:saved, expense})
+
+        PubSub.broadcast(Splitmore.PubSub, "group:#{Map.get(expense_params, "group_id")}", {:expense_updated})
 
         {:noreply,
          socket
