@@ -14,23 +14,49 @@
 
 ## Development
 
-- `cp config/dev.exs.example config/dev.exs` and update env for `ueberauth`
+### Prerequisite
 
----
+ - [Elixir](https://elixir-lang.org/), recommanded to install via [asdf-vm](https://asdf-vm.com/)
+ - local postgres database
 
-To start your Phoenix server:
+### Setup for development
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+```bash
+git clone https://github.com/dannyh79/splitmore.git
+cd splitmore
+cp config/dev.exs.example config/dev.exs
+vim config/dev.exs # fill client creds under ueberauth
+mix setup # will run deps.get, db init and assets preparation
+```
+
+### Start web development server
+
+```bash
+iex -S mix phx.server
+# or without iex:
+mix phx.server
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+### Run tests
 
-## Learn more
+ ```bash
+mix test
+```
+
+#### Run E2E tests
+
+```bash
+mix e2e.setup # if first time
+mix e2e.test
+```
+
+## Learn more about Phoenix web framework
 
   * Official website: https://www.phoenixframework.org/
   * Guides: https://hexdocs.pm/phoenix/overview.html
+    * Deployment guides: https://hexdocs.pm/phoenix/deployment.html
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
