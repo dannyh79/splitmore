@@ -4,6 +4,8 @@ defmodule Splitmore.GroupsFixtures do
   entities via the `Splitmore.Groups` context.
   """
 
+  alias Splitmore.Groups.GroupUser
+
   @doc """
   Generate a group.
   """
@@ -16,5 +18,18 @@ defmodule Splitmore.GroupsFixtures do
       |> Splitmore.Groups.create_group()
 
     group
+  end
+
+  @doc """
+  Generate a group user association.
+  """
+  def group_user_fixture(%{group_id: _, user_id: _} = attrs) do
+    {:ok, group_user} =
+      %GroupUser{}
+      |> GroupUser.changeset(attrs)
+      |> Splitmore.Repo.insert()
+
+    group_user
+    |> Splitmore.Repo.preload(:user)
   end
 end

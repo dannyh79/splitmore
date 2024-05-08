@@ -1,8 +1,8 @@
 defmodule Splitmore.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Splitmore.Groups.Group
   alias Splitmore.Expenses.Expense
+  alias Splitmore.Groups.GroupUser
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -11,7 +11,7 @@ defmodule Splitmore.Accounts.User do
     field :provider, :string
     field :token, :string
 
-    many_to_many :groups, Group, join_through: "groups_users"
+    has_many :groups, GroupUser
 
     has_many :expenses, Expense
 

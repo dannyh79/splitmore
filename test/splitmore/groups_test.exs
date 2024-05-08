@@ -27,16 +27,15 @@ defmodule Splitmore.GroupsTest do
   describe "get_group_with_users!/1" do
     test "returns the group with its associated users" do
       group = group_fixture()
-      user = user_fixture()
+      users = for _ <- 1..2, do: user_fixture()
 
-      Splitmore.Repo.query!(
-        "INSERT INTO groups_users (group_id, user_id) VALUES ('#{group.id}', '#{user.id}')"
-      )
+      group_users =
+        users
+        |> Enum.map(&group_user_fixture(%{group_id: group.id, user_id: &1.id}))
 
       result = Groups.get_group_with_users!(group.id)
       assert drop(result, [:users]) == drop(group, [:users])
-      # TODO: update this
-      assert Enum.map(result.users, fn u -> drop(u, [:admin?]) end) == [user]
+      assert result.users == group_users
     end
   end
 

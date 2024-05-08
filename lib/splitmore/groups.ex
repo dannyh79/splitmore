@@ -6,6 +6,7 @@ defmodule Splitmore.Groups do
   import Ecto.Query, warn: false
   alias Splitmore.Accounts.User
   alias Splitmore.Groups.Group
+  alias Splitmore.Groups.GroupUser
   alias Splitmore.Repo
 
   @doc """
@@ -38,13 +39,9 @@ defmodule Splitmore.Groups do
   def get_group!(id), do: Repo.get!(Group, id)
 
   def get_group_with_users!(id) do
-    group =
-      Group
-      |> Repo.get!(id)
-      |> Repo.preload(:users)
-
-    users_with_stubbed_field = Enum.map(group.users, &Map.put(&1, :admin?, true))
-    %{group | users: users_with_stubbed_field}
+    Group
+    |> Repo.get!(id)
+    |> Repo.preload(users: [:user])
   end
 
   @doc """
@@ -136,28 +133,28 @@ defmodule Splitmore.Groups do
   end
 
   defp user_in_group?(%Group{} = group, %User{} = user) do
-    Enum.any?(group.users, &(&1.id == user.id))
+    Enum.any?(group.users, &(&1.user_id == user.id))
   end
 
   defp p_add_user_to_group(%Group{} = group, %User{} = user) do
-    %{users: users} =
-      group
-      |> Repo.preload(:users)
+    group_user_changeset =
+      %GroupUser{}
+      |> GroupUser.changeset(%{group_id: group.id, user_id: user.id, role: :default})
 
-    {:ok, _} =
-      group
-      |> Ecto.Changeset.change()
-      |> Ecto.Changeset.put_assoc(:users, users ++ [user])
-      |> Repo.update()
-
-    {:ok}
+    case Repo.insert(group_user_changeset) do
+      {:ok, _group_user} -> {:ok}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 
   def add_user_to_group(%Group{} = group, %User{} = user) do
-    group
-    |> Repo.preload(:users)
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:users, [user])
-    |> Repo.update()
+    group_user_changeset =
+      %GroupUser{}
+      |> GroupUser.changeset(%{group_id: group.id, user_id: user.id, role: :default})
+
+    case Repo.insert(group_user_changeset) do
+      {:ok, _group_user} -> {:ok, group}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 end

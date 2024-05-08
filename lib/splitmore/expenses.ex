@@ -3,7 +3,6 @@ defmodule Splitmore.Expenses do
   The Expenses context.
   """
 
-  import Ecto, only: [assoc: 2]
   import Ecto.Query, warn: false
   alias Splitmore.Groups.Group
   alias Splitmore.Accounts.User
@@ -50,8 +49,12 @@ defmodule Splitmore.Expenses do
   end
 
   defp p_list_group_users(group_id) do
-    group = Repo.get(Group, group_id)
-    Repo.all(assoc(group, :users))
+    group =
+      Group
+      |> Repo.get(group_id)
+      |> Repo.preload(users: :user)
+
+    Enum.map(group.users, fn %{user: user} -> user end)
   end
 
   defp p_list_group_expenses(group_id) do
