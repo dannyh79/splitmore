@@ -24,4 +24,8 @@ defmodule Splitmore.Groups.GroupUser do
     |> validate_required([:group_id, :user_id])
     |> unique_constraint([:group_id, :user_id])
   end
+
+  def admin?(role) do
+    role == :admin
+  end
 end

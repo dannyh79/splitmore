@@ -23,7 +23,7 @@ defmodule SplitmoreWeb.GroupLive.FormComponent do
         <%= if @action == :edit do %>
           <.table id="group_users" rows={@group.users}>
             <:col :let={%{user_id: id, role: role}} label="Admin">
-              <.input type="checkbox" name={id} checked={role == :admin} />
+              <.input type="checkbox" name={id} checked={Groups.group_admin?(role)} />
             </:col>
             <:col :let={%{user: %{email: email}}} label="Email"><%= email %></:col>
           </.table>

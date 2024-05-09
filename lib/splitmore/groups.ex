@@ -157,4 +157,6 @@ defmodule Splitmore.Groups do
       {:error, changeset} -> {:error, changeset}
     end
   end
+
+  def group_admin?(role), do: GroupUser.admin?(role)
 end

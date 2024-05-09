@@ -123,4 +123,14 @@ defmodule Splitmore.GroupsTest do
       assert {:ok, %Group{}} = Groups.add_user_to_group(group, user)
     end
   end
+
+  describe "group_admin?/1" do
+    test "returns true" do
+      assert Groups.group_admin?(:admin)
+    end
+
+    test "returns false" do
+      refute Groups.group_admin?(:foo)
+    end
+  end
 end
