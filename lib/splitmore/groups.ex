@@ -160,5 +160,5 @@ defmodule Splitmore.Groups do
 
   def group_admin?(role), do: GroupUser.admin?(role)
 
-  def group_admin(), do: :admin
+  def group_admin(), do: GroupUser.admin()
 end

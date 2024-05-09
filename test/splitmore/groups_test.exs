@@ -142,4 +142,10 @@ defmodule Splitmore.GroupsTest do
       refute Groups.group_admin?(:foo)
     end
   end
+
+  describe "group_admin/0" do
+    test "returns :admin" do
+      assert :admin == Groups.group_admin()
+    end
+  end
 end
