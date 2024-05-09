@@ -147,10 +147,10 @@ defmodule Splitmore.Groups do
     end
   end
 
-  def add_user_to_group(%Group{} = group, %User{} = user) do
+  def add_user_to_group(%Group{} = group, %User{} = user, role \\ :default) do
     group_user_changeset =
       %GroupUser{}
-      |> GroupUser.changeset(%{group_id: group.id, user_id: user.id, role: :default})
+      |> GroupUser.changeset(%{group_id: group.id, user_id: user.id, role: role})
 
     case Repo.insert(group_user_changeset) do
       {:ok, _group_user} -> {:ok, group}
@@ -159,4 +159,6 @@ defmodule Splitmore.Groups do
   end
 
   def group_admin?(role), do: GroupUser.admin?(role)
+
+  def group_admin(), do: :admin
 end

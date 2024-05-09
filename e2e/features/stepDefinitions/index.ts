@@ -223,18 +223,28 @@ Then('I can see the groups', async ({ page }) => {
 });
 
 Then('There are users in group {string}:', async ({}, name: string, data: DataTable) => {
-  const [{ count }] = await DB.query<{ count: number }>(
+  // ref: Splitmore.Groups.GroupUser schema
+  const roleValueMap = {
+    0: 'default',
+    1: 'admin',
+  };
+
+  const rows = await DB.query<{ email: string; role: number }>(
     `
-    SELECT COUNT(*) FROM groups_users
-    JOIN users ON groups_users.user_id = users.id
-    JOIN groups ON groups_users.group_id = groups.id
-    WHERE groups.name = '${name}'
-    AND users.email IN (${data
-      .raw()
-      .flat()
-      .map((e) => `'${e}'`)
+    SELECT u.email, gu.role FROM groups_users AS gu
+    JOIN users AS u ON gu.user_id = u.id
+    JOIN groups AS g ON gu.group_id = g.id
+    WHERE g.name = '${name}'
+    AND u.email IN (${data
+      .hashes()
+      .map((u) => `'${u.email}'`)
       .join(',')})`,
     { type: QueryTypes.SELECT },
   );
-  expect(Number(count)).toEqual(data.raw().length);
+
+  const expected = data.hashes();
+  rows.forEach((r, i) => {
+    expect(r.email).toEqual(expected[i].email);
+    expect(roleValueMap[r.role]).toEqual(expected[i].role);
+  });
 });

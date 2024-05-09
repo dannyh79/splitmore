@@ -16,3 +16,16 @@ Feature: Group Permission
     And I can see dialog "Edit Group":
     | chenghsuan.han@gmail.com |
     | another@example.com      |
+  Scenario: I am the group's admin after creating a group
+    Given there are users:
+    | id                                   | email                    | provider | token                                    | inserted_at         | updated_at          |
+    | 930ec9de-fac5-4d21-88da-ee41ea5f1615 | chenghsuan.han@gmail.com | github   | ghu_aaaaaaWwmDecVuvtXDZ4nqSy3MGxa22XWQFK | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
+    And I have logged in as "chenghsuan.han@gmail.com"
+    When I visit "/groups"
+    And I add the groups via "/groups/new":
+    | name     |
+    | 宮妙少年 |
+    Then I can see the groups
+    And There are users in group "宮妙少年":
+    | email                    | role  |
+    | chenghsuan.han@gmail.com | admin |
