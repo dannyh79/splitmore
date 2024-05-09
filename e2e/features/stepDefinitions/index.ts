@@ -3,6 +3,12 @@ import { Page, expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
 import DB, { QueryTypes } from '../support/db';
 
+// ref: Splitmore.Groups.GroupUser schema
+const roleValueMap = {
+  0: 'default',
+  1: 'admin',
+};
+
 const { After, Given, Then, When } = createBdd();
 
 After(async () => {
@@ -70,6 +76,33 @@ VALUES `;
   q += rows;
   await DB.query(q);
 });
+
+Given(
+  'there are users by role in group {string}:',
+  async ({}, groupName: string, data: DataTable) => {
+    const invertedRoleValueMap = Object.assign(
+      {},
+      ...Object.entries(roleValueMap).map(([k, v]) => ({ [v]: k })),
+    );
+
+    const [group] = await DB.query<{ id: string }>(
+      `SELECT id FROM groups WHERE name = '${groupName}'`,
+      { type: QueryTypes.SELECT },
+    );
+    const dataRows = data.hashes();
+    const userIds = await DB.query<{ id: string }>(
+      `SELECT id FROM users WHERE email IN (${dataRows.map((u) => `'${u.email}'`).join(',')})`,
+      { type: QueryTypes.SELECT },
+    );
+    let q = `INSERT INTO groups_users (group_id, user_id, role)
+VALUES `;
+    const rows = userIds
+      .map((u, i) => `('${group.id}', '${u.id}', '${invertedRoleValueMap[dataRows[i].role]}')`)
+      .join(',');
+    q += rows;
+    await DB.query(q);
+  },
+);
 
 When('I visit {string}', async ({ page }, path: string) => {
   await page.goto(path);
@@ -223,12 +256,6 @@ Then('I can see the groups', async ({ page }) => {
 });
 
 Then('There are users in group {string}:', async ({}, name: string, data: DataTable) => {
-  // ref: Splitmore.Groups.GroupUser schema
-  const roleValueMap = {
-    0: 'default',
-    1: 'admin',
-  };
-
   const rows = await DB.query<{ email: string; role: number }>(
     `
     SELECT u.email, gu.role FROM groups_users AS gu

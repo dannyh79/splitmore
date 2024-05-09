@@ -7,9 +7,10 @@ Feature: Group Permission
     And there are groups:
     | id                                   | name     | inserted_at         | updated_at          |
     | 4e95b8e7-2ee4-450a-8250-1b605cec78a3 | 宮妙少年 | 2024-04-08 00:00:00 | 2024-04-08 00:00:00 |
-    And there are users in group "宮妙少年":
-    | chenghsuan.han@gmail.com |
-    | another@example.com      |
+    And there are users by role in group "宮妙少年":
+    | email                    | role    |
+    | chenghsuan.han@gmail.com | admin   |
+    | another@example.com      | default |
     And I have logged in as "chenghsuan.han@gmail.com"
     When I visit "/groups/4e95b8e7-2ee4-450a-8250-1b605cec78a3/show/edit"
     Then I can see the title "Edit Group"
